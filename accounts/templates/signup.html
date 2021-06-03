@@ -1,0 +1,238 @@
+{% load static %}
+<html>
+    <head>
+        <meta name="theme-color" content="#141e30"/>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="HandheldFriendly" content="true">
+        <link rel="icon" href="{% static 'img/icon1.png' %}">
+        <link rel="stylesheet" href="{% static 'css/fontawesome-free.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/popper.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/fontawesome.js' %}"></script>
+        <title>CSManager | Signup</title>
+        <style>
+            *{
+                font-family: Helvetica;
+                transition: all 0.2s ease;
+            }
+            .bold{
+                font-weight: bold !important;
+            }
+            .image-fluid{
+                max-width: 100%;
+                max-height: 100%;
+                display: block;
+                margin: auto;
+            }
+            
+            .err-msg{
+                display: none;
+            }
+            .form-group.err .form-control{
+                border: 2px solid #dc3545;
+            }
+            .form-group.err .err-msg{
+                display: block;
+            }
+            
+            .fileUpload{
+                width: 100px;
+                height: 100px;
+                margin: auto;
+                border: 2px dashed dodgerblue;
+                border-radius: 4px;
+                background: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+            .fileUpload:hover{
+                box-shadow: 0px 0px 10px grey;
+            }
+            
+
+        </style>
+    </head>
+    <body class="bg-primary">
+        
+        <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 col-md-8">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5 mb-5">
+                                    <div class="card-header">
+                                        <h3 class="text-center font-weight-light bold my-4">
+                                            Sign Up With Email
+                                        </h3>
+                                        {% if err %}
+                                        <h3 class="text-center text-danger bold my-4">
+                                            {{err}}
+                                        </h3>
+                                        {% endif %}
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="form-group d-flex justify-content-between align-items-center">
+                                                <div class="col-5 p-0">
+                                                    <label class="text-dark bold mb-1" for="fname">
+                                                        First Name 
+                                                        <span class="text-danger bold">*</span>
+                                                    </label>
+                                                    <input class="form-control py-4" id="fname" name="fname" type="text" placeholder="First Name" required="true">
+                                                </div>
+                                                <div class="col-5 p-0">
+                                                    <label class="text-dark bold mb-1" for="lname">
+                                                        Last Name 
+                                                        <span class="text-danger bold">*</span>
+                                                    </label>
+                                                    <input class="form-control py-4" id="lname" name="lname" type="text" placeholder="Last Name" required="true">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="text-dark bold mb-1" for="cname">
+                                                    Company Name 
+                                                    <span class="text-danger bold">*</span>
+                                                </label>
+                                                <input onkeyup="adjustSubdomain(this.value)" class="form-control py-4" id="cname" name="cname" type="text" placeholder="Comany Name" required="true">
+                                                <input type="hidden" name="subdomain" id="subdomain" value="">
+                                                <h6 id="subdomainExample" class="text-primary bold mt-3"></h6>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="text-dark bold mb-1" for="email">
+                                                	Email 
+                                                    <span class="text-danger bold">*</span>
+                                                </label>
+                                                <input class="form-control py-4" id="email" name="email" type="email" placeholder="Email" required="true">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="text-dark bold mb-1" for="password">
+                                                	Password 
+                                                    <span class="text-danger bold">*</span>
+                                                </label>
+                                                <input onblur="checkPassword()" class="form-control py-4" id="password" name="password" type="password" placeholder="password" required="true">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="text-dark bold mb-1" for="repass">
+                                                    Repeat Password 
+                                                    <span class="text-danger bold">*</span>
+                                                    <br/>
+                                                    <span class="text-danger bold err-msg">
+                                                        Passwords Don't match
+                                                    </span>
+                                                </label>
+                                                <input onblur="checkRePass()" class="form-control py-4" id="repass" name="repass" type="password" placeholder="Repeat password" required="true">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="text-dark bold mb-1">
+                                                    Image
+                                                </label>
+                                                <br/>
+                                                <input onchange="previewImage(this)" class="d-none" id="image" name="image" type="file">
+                                                <div class="d-flex justify-content-left align-items-center">
+                                                    <button onclick="$('#image').click()" type="button" class="btn btn-success text-white bold">
+                                                        Upload Image 
+                                                        <i class="fas fa-file-upload"></i> 
+                                                    </button>
+                                                    <div id="imageExample" class="ml-3">
+                                                        <img style="max-height: 100px;" src="" alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
+                                                <button id="submitBtn" type="submit" class="w-100 btn btn-primary">
+                                                    Sign Up
+                                                </button>
+                                            </div>
+                                        </form>
+                                        <hr>
+                                        <a href="{% url 'signin' %}" class="nav-link text-info text-center bold">
+                                            Already a member?
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <script>
+
+            function adjustSubdomain(val){
+                if (val != "") {
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'checkSubdomain' %}",
+                        data: {
+                            "subdomain": val
+                        },
+                        success: function(result){
+                            $("#subdomainExample").text(result);
+                        }
+                    });
+                }
+                else{
+                    $("#subdomainExample").text('');
+                }
+            }
+
+
+            function previewImage(obj){
+                file = obj.files[0];
+                var reader = new FileReader();
+
+                reader.addEventListener("load", function () {
+                    $("#imageExample img").attr('src', reader.result.toString());
+                }, false);
+
+                reader.readAsDataURL(file);
+            }
+
+
+
+            function checkPassword(){
+                var password = $("#password").val();
+                var repass = $("#repass").val();
+                if (password == repass){
+                    $("#repass").closest('.form-group').removeClass('err');
+                    $("#submitBtn").removeAttr('disabled');
+                    $("#submitBtn").removeClass('btn-light');
+                    $("#submitBtn").addClass('btn-primary');
+                }
+            }
+
+            function checkRePass(){
+                var password = $("#password").val();
+                var repass = $("#repass").val();
+                if (password != repass){
+                    $("#repass").closest('.form-group').addClass('err');
+                    $("#submitBtn").attr('disabled','true');
+                    $("#submitBtn").removeClass('btn-primary');
+                    $("#submitBtn").addClass('btn-light');
+                }
+                else{
+                    $("#repass").closest('.form-group').removeClass('err');
+                    $("#submitBtn").removeAttr('disabled');
+                    $("#submitBtn").removeClass('btn-light');
+                    $("#submitBtn").addClass('btn-primary');
+                }
+            }
+
+            $("form").on('submit', function(e){
+                var password = $("#password").val();
+                var repass = $("#repass").val();
+                if (password != repass){
+                    e.preventDefault();
+                }
+            });
+        </script>
+    </body>
+</html>

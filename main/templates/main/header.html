@@ -1,0 +1,55 @@
+{% load static %}
+{% load hosts %}
+<style>
+    #home{
+        width: 100%;
+        min-height: 100%;
+        padding-bottom: 0 !important;
+    }
+</style>
+<header id="home" class="p-md-5 p-3">
+    <div class="row">
+        <div class="col-md-7 col-md-push-5 col-12 mt-md-0 mt-3">
+            <h1 class="text-dark bold text-md-left text-center p-2 pb-3">
+                CSManager
+            </h1>
+            <h5 class="text-secondary bold text-md-left text-center p-2 pb-3">
+                Customer Service Platform For Your Company.
+            </h5>
+            <ul class="nav d-flex justify-content-md-start justify-content-center align-items-center">
+                <li class="nav-item p-2 pb-3">
+                    <a href="#!" class="btn btn-primary text-white bold">
+                        Read more 
+                        <i class="fas fa-book"></i>
+                    </a>
+                </li>
+                <li class="nav-item p-2 pb-3">
+                    {% if request.user.is_authenticated %}
+                        <a href="#!" class="btn btn-danger text-white bold">
+                            Dashboard 
+                            <i class="fas fa-terminal"></i>
+                        </a>
+                    {% else %}
+                        <a href="#!" class="btn btn-danger text-white bold">
+                            Get Started 
+                            <i class="fas fa-terminal"></i>
+                        </a>
+                    {% endif %}
+                </li>
+            </ul>
+            <div class="p-2 mt-3">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <p class="text-dark bold">- Sign Up To Create Your Company Account.</p>
+                        <p class="text-dark bold">- Get Your Phone Number & Share With Clients.</p>
+                        <p class="text-dark bold">- Create Campaigns Using IVR system.</p>
+                        <p class="text-dark bold">- Register Operators & Receive Calls.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 300px;" class="col-md-5 col-md-pull-7 col-12 order-md-last order-first">
+            <img class="image-fluid" src="{% static 'img/icon1.png' %}">
+        </div>
+    </div>
+</header>

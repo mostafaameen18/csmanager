@@ -1,0 +1,78 @@
+{% load static %}
+<html>
+    <head>
+        <meta name="theme-color" content="#141e30"/>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="HandheldFriendly" content="true">
+        <link rel="icon" href="{% static 'img/icon1.png' %}">
+        <link rel="stylesheet" href="{% static 'css/fontawesome-free.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/popper.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/fontawesome.js' %}"></script>
+        <title>CSManager | Signin</title>
+        <style>
+            *{
+                font-family: Helvetica;
+                transition: all 0.2s ease;
+            }
+            .bold{
+                font-weight: bold !important;
+            }
+        </style>
+    </head>
+    <body class="bg-primary">
+
+        <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 col-md-8">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5 mb-5">
+                                    <div class="card-header">
+                                        <h3 class="text-center font-weight-light bold my-4">
+                                            Login
+                                        </h3>
+                                        {% if err %}
+                                        <h3 class="text-center text-danger bold my-4">
+                                            {{err}}
+                                        </h3>
+                                        {% endif %}
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" action="{% url 'signin' %}{% if next %}?next={{next}}{% endif %}">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label class="text-dark bold mb-1" for="email">
+                                                	Email
+                                                </label>
+                                                <input class="form-control py-4" id="email" name="email" type="text" placeholder="Enter Email" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="text-dark bold mb-1" for="password">
+                                                	Password
+                                                </label>
+                                                <input class="form-control py-4" id="password" name="password" type="password" placeholder="Enter password" />
+                                            </div>
+                                            <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
+                                                <button type="submit" class="w-100 btn btn-primary">Login</button>
+                                            </div>
+                                        </form>
+                                        <hr>
+                                        <a href="{% url 'signup' %}" class="nav-link text-info text-center bold">
+                                            Don't have an account?
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </body>
+</html>
