@@ -18,6 +18,9 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 
+ACCOUNT_SID = config('ACCOUNT_SID')
+AUTH_TOKEN = config('AUTH_TOKEN')
+
 SITE_DOMAIN = config('SITE_DOMAIN')
 
 
@@ -38,13 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_hosts',
+    # 'django_hosts',
     'main',
     'accounts',
     'dashboard',
 ]
 
 MIDDLEWARE = [
+    # 'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,14 +56,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'csmanager.urls'
-ROOT_HOSTCONF = 'scanner.hosts'
-DEFAULT_HOST = 'main'
-PARENT_HOST = 'localhost:8000'
-SESSION_COOKIE_DOMAIN = '.localhost'
-SESSION_COOKIE_NAME = 'sharesession'
+# ROOT_HOSTCONF = 'csmanager.hosts'
+# DEFAULT_HOST = 'main'
+# PARENT_HOST = config('SITE_DOMAIN')
+# SESSION_COOKIE_SECURE = False
+# SESSION_COOKIE_DOMAIN = '.127.0.0.1:8000'
 
 TEMPLATES = [
     {
@@ -132,7 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_REDIRECT_URL = ''
+LOGIN_REDIRECT_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

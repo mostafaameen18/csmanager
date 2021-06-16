@@ -78,7 +78,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="card-body">
-                                        <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
+                                        <form autocomplete="off" method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <div class="form-group d-flex justify-content-between align-items-center">
                                                 <div class="col-5 p-0">
@@ -104,6 +104,17 @@
                                                 <input onkeyup="adjustSubdomain(this.value)" class="form-control py-4" id="cname" name="cname" type="text" placeholder="Comany Name" required="true">
                                                 <input type="hidden" name="subdomain" id="subdomain" value="">
                                                 <h6 id="subdomainExample" class="text-primary bold mt-3"></h6>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="text-dark bold mb-1" for="email">
+                                                	Phone Number Country 
+                                                    <span class="text-danger bold">*</span>
+                                                </label>
+                                                <select class="form-control py-4" id="phoneNumberCountry" name="phoneNumberCountry" required="true">
+                                                    {% for available_country in available_countries %}
+                                                        <option value="{{available_country}}">{{available_country}}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label class="text-dark bold mb-1" for="email">
@@ -175,7 +186,14 @@
                             "subdomain": val
                         },
                         success: function(result){
-                            $("#subdomainExample").text(result);
+                            result = JSON.parse(result);
+                            var subdomain = result['subdomain'];
+                            var domain = result['domain'];
+
+                            var fullDomain = domain + "/dashboard/" + subdomain;
+
+                            $("#subdomain").val(subdomain);
+                            $("#subdomainExample").text(fullDomain);
                         }
                     });
                 }

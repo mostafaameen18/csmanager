@@ -6,8 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
+from twilio.rest import Client
 from accounts.models import *
-import string
+import string, json
 from random import *
 
 
@@ -27,9 +28,8 @@ def codeGenerator():
 
 def subdomainModifier(subdomain):
 	chars = string.digits
-	min_length = 2
-	max_length = 3
-	code = "".join(choice(chars) for i in range(randint(min_length, max_length)))
+	length = 1
+	code = "".join(choice(chars) for i in range(length))
 	newSubdomain = subdomain + code
 
 	if Company.objects.filter(subdomain=newSubdomain).exists():

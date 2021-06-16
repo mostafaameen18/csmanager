@@ -1,5 +1,4 @@
 {% load static %}
-{% load hosts %}
 <style>
     #home{
         width: 100%;
@@ -25,12 +24,12 @@
                 </li>
                 <li class="nav-item p-2 pb-3">
                     {% if request.user.is_authenticated %}
-                        <a href="#!" class="btn btn-danger text-white bold">
+                        <a href="{% url 'company' company.subdomain %}" class="btn btn-danger text-white bold">
                             Dashboard 
                             <i class="fas fa-terminal"></i>
                         </a>
                     {% else %}
-                        <a href="#!" class="btn btn-danger text-white bold">
+                        <a href="{% url 'signup' %}" class="btn btn-danger text-white bold">
                             Get Started 
                             <i class="fas fa-terminal"></i>
                         </a>

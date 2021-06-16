@@ -7,7 +7,17 @@ class signup(View):
 		if request.user.is_authenticated:
 			return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
-		context = {}
+		available_countries = []
+		client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+		available_phone_numbers = client.available_phone_numbers.list()
+		for available_phone_number in available_phone_numbers:
+			if available_phone_number.country_code == 'IL':
+				continue
+			available_countries.append(available_phone_number.country_code + " - " + available_phone_number.country)
+
+		context = {
+			"available_countries": sorted(available_countries),
+		}
 
 		if "OSN_SIGNUP_ERROR" in request.COOKIES:
 			err = request.COOKIES['OSN_SIGNUP_ERROR']
@@ -25,6 +35,7 @@ class signup(View):
 		fname = request.POST.get('fname')
 		lname = request.POST.get('lname')
 		cname = request.POST.get('cname')
+		phoneNumberCountry = request.POST.get('phoneNumberCountry').split(' - ')[0]
 		subdomain = request.POST.get('subdomain')
 		email = request.POST.get('email')
 		password = request.POST.get('password')
@@ -40,8 +51,10 @@ class signup(View):
 				user.save()
 
 				code = codeGenerator()
+
+				# TODO: Get Twilio phone mumber and save it in next company instance
 				
-				company = Company(user=user, name=name, subdomain=subdomain, code=code)
+				company = Company(user=user, name=cname, subdomain=subdomain, code=code)
 				if image:
 					company.image = image
 				company.save()
@@ -78,4 +91,9 @@ def checkSubdomain(request):
 	if Company.objects.filter(subdomain=subdomain).exists():
 		subdomain = subdomainModifier(subdomain)
 
-	return HttpResponse("{}.{}".format(subdomain, settings.SITE_DOMAIN))
+	context = {
+		"subdomain": subdomain,
+		"domain": settings.SITE_DOMAIN,
+	}
+
+	return HttpResponse(json.dumps(context))
